@@ -49,4 +49,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;   // 👈 ¡ESTO ES CLAVE!
+module.exports = router;   // important

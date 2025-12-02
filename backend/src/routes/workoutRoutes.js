@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(auth);
 
-// Crear entrenamiento
+// create sesion
 router.post('/', async (req, res) => {
   const { routineId, date, performedExercises } = req.body;
 
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Obtener historial
+// get record 
 router.get('/', async (req, res) => {
   try {
     const sessions = await WorkoutSession.find({ userId: req.user.userId })
@@ -39,4 +39,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;  // 👈 IMPORTANTE
+module.exports = router;  // important

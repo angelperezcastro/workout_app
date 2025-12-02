@@ -13,8 +13,8 @@ const routineSchema = new mongoose.Schema({
   exercises: [exerciseSchema]
 });
 
-// 👇 AQUÍ CREAMOS EL MODELO
+// create the model
 const Routine = mongoose.model('Routine', routineSchema);
 
-// 👇 Y LO EXPORTAMOS DIRECTAMENTE
+// export the model
 module.exports = Routine;
