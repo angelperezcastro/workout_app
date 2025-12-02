@@ -7,6 +7,7 @@ import Routines from './pages/Routines'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 
+
 function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
