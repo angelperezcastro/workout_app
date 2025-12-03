@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard'
 import Routines from './pages/Routines'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
+import "./App.css";
+
 
 
 function App() {
