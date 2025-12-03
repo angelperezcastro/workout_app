@@ -13,3 +13,8 @@ export async function createRoutine({ name, description = '', exercises = [] }) 
   })
   return res.data
 }
+
+export async function getRoutine(id) {
+  const res = await api.get(`/routines/${id}`)
+  return res.data
+}
