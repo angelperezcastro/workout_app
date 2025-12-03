@@ -41,4 +41,24 @@ router.post('/', async (req, res) => {
   }
 })
 
+// GET /api/routines/:id -> obtener rutina concreta
+router.get('/:id', async (req, res) => {
+  try {
+    const routine = await Routine.findOne({
+      _id: req.params.id,
+      userId: req.user.userId, // seguridad: aseguramos que pertenece al usuario
+    }).populate('exercises.exerciseId')
+
+    if (!routine) {
+      return res.status(404).json({ message: 'Routine not found' })
+    }
+
+    res.json(routine)
+  } catch (err) {
+    console.error('Error en GET /api/routines/:id:', err)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
+
 module.exports = router
