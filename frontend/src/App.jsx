@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard'
 import Routines from './pages/Routines'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
+import RoutineDetail from "./pages/RoutineDetail"
+
 import "./App.css";
 
 
@@ -40,6 +42,16 @@ function App() {
           />
 
           <Route path="*" element={<NotFound />} />
+
+          <Route
+  path="/routines/:id"
+  element={
+    <ProtectedRoute>
+      <RoutineDetail />
+    </ProtectedRoute>
+  }
+/>
+
         </Routes>
       </main>
     </div>
