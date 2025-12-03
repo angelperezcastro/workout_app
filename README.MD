@@ -93,18 +93,18 @@ This version focuses on delivering a **fully functional end-to-end workflow**, w
         The frontend will be available at something like:
         http://localhost:5173
 
-Draft Version Summary
+## Draft Version Summary
 
 This Draft Version demonstrates that:
 
-The architecture is correct
+- The architecture is correct
 
-Backend and frontend communicate properly
+- Backend and frontend communicate properly
 
-User flow works end-to-end
+- User flow works end-to-end
 
-Routines can be created and stored in MongoDB
+- Routines can be created and stored in MongoDB
 
-Routine details are correctly displayed
+- Routine details are correctly displayed
 
-This version is intentionally unpolished, but the core mechanics are implemented and working.
+- This version is intentionally unpolished, but the core mechanics are implemented and working.
