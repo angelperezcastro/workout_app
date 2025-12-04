@@ -45,36 +45,67 @@ function RoutineDetail() {
         <p className="text-slate-400">Esta rutina no tiene ejercicios.</p>
       ) : (
         <div className="space-y-4">
-          {routine.exercises.map((ex, index) => (
-            <div
-              key={index}
-              className="border border-slate-800 rounded-lg p-4 space-y-3"
-            >
-              {/* Encabezado del ejercicio */}
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-lg">
-                  {ex.exerciseId?.name || "Ejercicio"}
-                </span>
+          {routine.exercises.map((ex, index) => {
+            const exercise = ex.exerciseId || {}
+            const hasImage = !!exercise.imageUrl
 
-                <span className="text-xs text-slate-400">
-                  {ex.exerciseId?.muscleGroup}
-                </span>
+            return (
+              <div
+                key={index}
+                className="border border-slate-800 rounded-lg p-4 space-y-3 bg-slate-900/40"
+              >
+                <div className="flex gap-4 items-start">
+                  {/* Imagen del ejercicio */}
+                  {hasImage && (
+                    <img
+                      src={exercise.imageUrl}
+                      alt={exercise.name || "Ejercicio"}
+                      className="w-28 h-28 rounded-md object-cover flex-shrink-0 border border-slate-800"
+                    />
+                  )}
+
+                  {/* Info del ejercicio */}
+                  <div className="flex-1 space-y-2">
+                    {/* Encabezado del ejercicio */}
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="font-medium text-lg">
+                        {exercise.name || "Ejercicio"}
+                      </span>
+
+                      {exercise.muscleGroup && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-200">
+                          {exercise.muscleGroup}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Tipo de ejercicio (si lo tienes) */}
+                    {exercise.type && (
+                      <p className="text-xs uppercase tracking-wide text-slate-400">
+                        {exercise.type}
+                      </p>
+                    )}
+
+                    {/* Resumen de series/reps/peso */}
+                    {(ex.sets || ex.reps || ex.weight) ? (
+                      <p className="text-sm text-slate-300">
+                        <span className="font-semibold">{ex.sets ?? "-"}</span>{" "}
+                        series ·{" "}
+                        <span className="font-semibold">{ex.reps ?? "-"}</span>{" "}
+                        reps ·{" "}
+                        <span className="font-semibold">{ex.weight ?? "-"}</span>{" "}
+                        kg
+                      </p>
+                    ) : (
+                      <p className="text-slate-300 text-sm">
+                        Este ejercicio no tiene series asignadas.
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-
-              {/* Resumen de series/reps/peso */}
-              {(ex.sets || ex.reps || ex.weight) ? (
-                <p className="text-sm text-slate-300">
-                  {ex.sets ?? "-"} series ·{" "}
-                  {ex.reps ?? "-"} reps ·{" "}
-                  {ex.weight ?? "-"} kg
-                </p>
-              ) : (
-                <p className="text-slate-300 text-sm">
-                  Este ejercicio no tiene series asignadas.
-                </p>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
