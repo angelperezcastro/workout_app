@@ -5,7 +5,7 @@ The project includes authentication, routine creation, exercise selection, and a
 
 This version focuses on delivering a **fully functional end-to-end workflow**, with clean and modular backend and frontend structure, ready for future expansion in the Beta Stage.
 
-**The deploy is already done.** Link to the application: https://workout-app-peka.vercel.app/dashboard
+**The deploy is already done.** Link to the application: https://workout-app-peka.vercel.app
 
 ---
 
