@@ -6,7 +6,8 @@ require('dotenv').config()
 const authRoutes = require('./routes/authRoutes')
 const routineRoutes = require('./routes/routineRoutes')
 const workoutRoutes = require('./routes/workoutRoutes')
-const exerciseRoutes = require('./routes/exerciseRoutes')   // 👈 NUEVO
+const exerciseRoutes = require('./routes/exerciseRoutes')   
+
 
 const app = express()
 
@@ -14,10 +15,11 @@ app.use(cors())
 app.use(express.json())
 
 // Rutas
+
 app.use('/api/auth', authRoutes)
 app.use('/api/routines', routineRoutes)
 app.use('/api/workouts', workoutRoutes)
-app.use('/api/exercises', exerciseRoutes)   // 👈 NUEVO
+app.use('/api/exercises', exerciseRoutes)   
 
 const PORT = process.env.PORT || 5000
 
