@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { getRoutine } from "../services/routines"
+import { useI18n } from '../i18n/I18nProvider'
+
 
 function RoutineDetail() {
   const { id } = useParams()

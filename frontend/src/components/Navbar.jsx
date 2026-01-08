@@ -1,8 +1,11 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useI18n } from '../i18n/I18nProvider'
+import LanguageToggle from './LanguageToggle'
 
 function Navbar() {
   const navigate = useNavigate()
   const isLoggedIn = Boolean(localStorage.getItem('token'))
+  const { t } = useI18n()
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -27,10 +30,10 @@ function Navbar() {
           {isLoggedIn && (
             <>
               <NavLink to="/dashboard" className={linkClasses}>
-                Panel
+                {t('nav.dashboard')}
               </NavLink>
               <NavLink to="/routines" className={linkClasses}>
-                Rutinas
+                {t('nav.routines')}
               </NavLink>
             </>
           )}
@@ -41,13 +44,13 @@ function Navbar() {
                 to="/login"
                 className="text-sm font-medium text-slate-200 hover:text-white"
               >
-                Iniciar sesión
+                {t('nav.login')}
               </Link>
               <Link
                 to="/register"
                 className="text-sm font-medium text-white bg-primary px-3 py-2 rounded-md hover:bg-primary-dark transition"
               >
-                Registrarse
+                {t('nav.register')}
               </Link>
             </>
           ) : (
@@ -55,9 +58,12 @@ function Navbar() {
               onClick={handleLogout}
               className="text-sm font-medium text-slate-200 hover:text-white"
             >
-              Cerrar sesión
+              {t('nav.logout')}
             </button>
           )}
+
+          {/* Botón ES/EN */}
+          <LanguageToggle />
         </div>
       </nav>
     </header>

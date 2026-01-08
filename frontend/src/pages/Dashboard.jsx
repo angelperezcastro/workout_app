@@ -1,3 +1,6 @@
+import { useI18n } from '../i18n/I18nProvider'
+
+
 function Dashboard() {
   return (
     <div className="space-y-4">

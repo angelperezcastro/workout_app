@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react'
 import { getRoutines, createRoutine } from '../services/routines'
 import { getExercises } from '../services/exercises'
 import RoutineCard from '../components/RoutineCard'
+import { useI18n } from '../i18n/I18nProvider'
 
 function Routines() {
+  const { t } = useI18n()
+
   const [routines, setRoutines] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -38,24 +41,25 @@ function Routines() {
         setAvailableExercises(exercisesData)
       } catch (err) {
         console.error(err)
-        setError(err.message || 'Error al cargar los datos')
+        setError(err.message || t('routines.loadError'))
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAddExerciseToRoutine = () => {
     setFormError('')
 
     if (!selectedExerciseId) {
-      setFormError('Selecciona un ejercicio')
+      setFormError(t('routines.formErrorSelectExercise'))
       return
     }
     if (!sets || !reps) {
-      setFormError('Indica series y repeticiones')
+      setFormError(t('routines.formErrorSetsReps'))
       return
     }
 
@@ -69,7 +73,7 @@ function Routines() {
     )
 
     if (already) {
-      setFormError('Ese ejercicio con esos datos ya está añadido')
+      setFormError(t('routines.formErrorDuplicate'))
       return
     }
 
@@ -98,12 +102,12 @@ function Routines() {
     setFormError('')
 
     if (!name.trim()) {
-      setFormError('El nombre de la rutina es obligatorio')
+      setFormError(t('routines.formErrorNameRequired'))
       return
     }
 
     if (routineExercises.length === 0) {
-      setFormError('Añade al menos un ejercicio a la rutina')
+      setFormError(t('routines.formErrorAtLeastOne'))
       return
     }
 
@@ -124,53 +128,46 @@ function Routines() {
       setRoutineExercises([])
     } catch (err) {
       console.error(err)
-      setFormError(
-        err.response?.data?.message || 'No se pudo crear la rutina'
-      )
+      setFormError(err.response?.data?.message || t('routines.formErrorCreateFail'))
     } finally {
       setCreating(false)
     }
   }
 
-  if (loading) return <p>Cargando rutinas...</p>
+  if (loading) return <p>{t('routines.loading')}</p>
 
-  if (error)
-    return (
-      <p className="text-red-400">
-        {error}
-      </p>
-    )
+  if (error) {
+    return <p className="text-red-400">{error}</p>
+  }
 
   const getExerciseName = (id) =>
-    availableExercises.find((e) => e._id === id)?.name || 'Ejercicio'
+    availableExercises.find((e) => e._id === id)?.name || t('routines.exerciseFallback')
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h1 className="text-3xl font-semibold">Rutinas</h1>
-          <p className="text-slate-300">
-            Crea rutinas eligiendo ejercicios de tu catálogo y definiendo
-            series, repeticiones y peso.
-          </p>
+          <h1 className="text-3xl font-semibold">{t('routines.title')}</h1>
+          <p className="text-slate-300">{t('routines.subtitle')}</p>
         </div>
       </div>
 
       {/* Formulario de creación de rutina */}
       <section className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 space-y-4">
-        <h2 className="text-xl font-semibold">Crear nueva rutina</h2>
+        <h2 className="text-xl font-semibold">{t('routines.createTitle')}</h2>
+
         <form onSubmit={handleSubmitRoutine} className="space-y-4">
           {/* Nombre + descripción */}
           <div className="space-y-3">
             <div>
               <label className="block text-sm text-slate-300 mb-1">
-                Nombre de la rutina *
+                {t('routines.nameLabel')}
               </label>
               <input
                 type="text"
                 className="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Ej. Full body, Push/Pull, Pierna..."
+                placeholder={t('routines.namePlaceholder')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -178,12 +175,12 @@ function Routines() {
 
             <div>
               <label className="block text-sm text-slate-300 mb-1">
-                Descripción (opcional)
+                {t('routines.descriptionLabel')}
               </label>
               <textarea
                 className="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
                 rows={3}
-                placeholder="Breve descripción de la rutina"
+                placeholder={t('routines.descriptionPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
@@ -192,27 +189,23 @@ function Routines() {
 
           {/* Añadir ejercicios */}
           <div className="space-y-3">
-            <h3 className="text-lg font-medium">Ejercicios de la rutina</h3>
+            <h3 className="text-lg font-medium">{t('routines.routineExercisesTitle')}</h3>
 
             {availableExercises.length === 0 ? (
-              <p className="text-sm text-slate-400">
-                Aún no tienes ejercicios en tu catálogo. Crea algunos desde el
-                backend (colección <code>exercises</code>) para poder añadirlos
-                aquí.
-              </p>
+              <p className="text-sm text-slate-400">{t('routines.noCatalog')}</p>
             ) : (
               <>
                 <div className="grid gap-2 md:grid-cols-[2fr,1fr,1fr,1fr,auto] items-end">
                   <div>
                     <label className="block text-sm text-slate-300 mb-1">
-                      Ejercicio
+                      {t('routines.exerciseLabel')}
                     </label>
                     <select
                       className="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       value={selectedExerciseId}
                       onChange={(e) => setSelectedExerciseId(e.target.value)}
                     >
-                      <option value="">Selecciona ejercicio</option>
+                      <option value="">{t('routines.selectExercise')}</option>
                       {availableExercises.map((ex) => (
                         <option key={ex._id} value={ex._id}>
                           {ex.name}
@@ -223,7 +216,7 @@ function Routines() {
 
                   <div>
                     <label className="block text-sm text-slate-300 mb-1">
-                      Series
+                      {t('routines.sets')}
                     </label>
                     <input
                       type="number"
@@ -236,7 +229,7 @@ function Routines() {
 
                   <div>
                     <label className="block text-sm text-slate-300 mb-1">
-                      Reps
+                      {t('routines.reps')}
                     </label>
                     <input
                       type="number"
@@ -249,7 +242,7 @@ function Routines() {
 
                   <div>
                     <label className="block text-sm text-slate-300 mb-1">
-                      Peso (kg)
+                      {t('routines.weightKg')}
                     </label>
                     <input
                       type="number"
@@ -265,7 +258,7 @@ function Routines() {
                     onClick={handleAddExerciseToRoutine}
                     className="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-sm font-medium"
                   >
-                    Añadir
+                    {t('routines.add')}
                   </button>
                 </div>
 
@@ -275,31 +268,27 @@ function Routines() {
                     <table className="w-full text-sm">
                       <thead className="bg-slate-900/80">
                         <tr>
-                          <th className="px-3 py-2 text-left">Ejercicio</th>
-                          <th className="px-3 py-2 text-center">Series</th>
-                          <th className="px-3 py-2 text-center">Reps</th>
-                          <th className="px-3 py-2 text-center">Peso (kg)</th>
+                          <th className="px-3 py-2 text-left">{t('routines.exerciseLabel')}</th>
+                          <th className="px-3 py-2 text-center">{t('routines.sets')}</th>
+                          <th className="px-3 py-2 text-center">{t('routines.reps')}</th>
+                          <th className="px-3 py-2 text-center">{t('routines.weightKg')}</th>
                           <th className="px-3 py-2"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {routineExercises.map((ex, idx) => (
                           <tr key={idx} className="border-t border-slate-800">
-                            <td className="px-3 py-2">
-                              {getExerciseName(ex.exerciseId)}
-                            </td>
+                            <td className="px-3 py-2">{getExerciseName(ex.exerciseId)}</td>
                             <td className="px-3 py-2 text-center">{ex.sets}</td>
                             <td className="px-3 py-2 text-center">{ex.reps}</td>
-                            <td className="px-3 py-2 text-center">
-                              {ex.weight ?? '-'}
-                            </td>
+                            <td className="px-3 py-2 text-center">{ex.weight ?? '-'}</td>
                             <td className="px-3 py-2 text-right">
                               <button
                                 type="button"
                                 onClick={() => handleRemoveExercise(idx)}
                                 className="text-xs text-red-400 hover:text-red-300"
                               >
-                                Quitar
+                                {t('routines.remove')}
                               </button>
                             </td>
                           </tr>
@@ -312,31 +301,24 @@ function Routines() {
             )}
           </div>
 
-          {formError && (
-            <p className="text-sm text-red-400">
-              {formError}
-            </p>
-          )}
+          {formError && <p className="text-sm text-red-400">{formError}</p>}
 
           <button
             type="submit"
             disabled={creating}
             className="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-sm font-medium"
           >
-            {creating ? 'Creando rutina...' : 'Guardar rutina'}
+            {creating ? t('routines.creating') : t('routines.saveRoutine')}
           </button>
         </form>
       </section>
 
       {/* Lista de rutinas existentes */}
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Tus rutinas</h2>
+        <h2 className="text-xl font-semibold">{t('routines.yourRoutines')}</h2>
 
         {routines.length === 0 ? (
-          <p className="text-slate-400">
-            Todavía no tienes ninguna rutina. Crea una con el formulario de
-            arriba.
-          </p>
+          <p className="text-slate-400">{t('routines.noRoutines')}</p>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {routines.map((routine) => (
