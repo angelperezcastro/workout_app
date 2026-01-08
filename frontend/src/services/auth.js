@@ -1,43 +1,39 @@
-import api from './api'
+import api from "./api";
 
 // LOGIN
 export async function login({ email, password }) {
   try {
-    const res = await api.post('/auth/login', { email, password })
-
-    // El backend devuelve: { token, user }
-    const { token, user } = res.data
+    const res = await api.post("/auth/login", { email, password });
+    const { token, user } = res.data;
 
     if (!token) {
-      throw new Error('El servidor no devolvió un token.')
+      throw new Error("errors.noTokenFromServer");
     }
 
-    return { token, user }
+    return { token, user };
   } catch (error) {
     const message =
       error?.response?.data?.message ||
       error?.response?.data?.error ||
-      'Error al iniciar sesión'
+      error?.message ||
+      "errors.loginFailed";
 
-    throw new Error(message)
+    throw new Error(message);
   }
 }
 
 // REGISTER
 export async function register({ email, password, name }) {
   try {
-    const res = await api.post('/auth/register', { email, password, name })
-
-    // El backend devuelve: { message: "User created" }
-    return {
-      message: res.data.message || 'Usuario creado correctamente'
-    }
+    const res = await api.post("/auth/register", { email, password, name });
+    return { message: res.data.message || "ok" };
   } catch (error) {
     const message =
       error?.response?.data?.message ||
       error?.response?.data?.error ||
-      'Error al registrarse'
+      error?.message ||
+      "errors.registerFailed";
 
-    throw new Error(message)
+    throw new Error(message);
   }
 }

@@ -5,22 +5,53 @@ const I18nContext = createContext(null);
 const translations = {
   es: {
     common: {
-      language: "Idioma",
-      spanish: "Español",
-      english: "Inglés",
       loading: "Cargando...",
       save: "Guardar",
       add: "Añadir",
       remove: "Quitar",
-      login: "Iniciar sesión",
-      register: "Registrarse",
+      back: "Volver",
+      yes: "Sí",
+      no: "No",
     },
     nav: {
-    dashboard: "Panel",
-    routines: "Rutinas",
-    login: "Iniciar sesión",
-    register: "Registrarse",
-    logout: "Cerrar sesión",
+      dashboard: "Panel",
+      routines: "Rutinas",
+      login: "Iniciar sesión",
+      register: "Registrarse",
+      logout: "Cerrar sesión",
+    },
+    languageToggle: {
+      title: "Cambiar idioma",
+    },
+    dashboard: {
+      title: "Panel",
+      subtitle:
+        "Aquí más adelante mostraremos un resumen de tus entrenamientos, estadísticas, últimas sesiones, etc.",
+      sessionsThisWeek: "Sesiones esta semana",
+      activeRoutines: "Rutinas activas",
+      totalSets: "Series totales",
+    },
+    auth: {
+      loginTitle: "Iniciar sesión",
+      loginSubtitle: "Accede a tu panel de entrenamientos.",
+      email: "Email",
+      password: "Contraseña",
+      loggingIn: "Entrando...",
+      loginBtn: "Entrar",
+      noAccount: "¿No tienes cuenta?",
+      signupHere: "Regístrate aquí",
+
+      registerTitle: "Crear cuenta",
+      registerSubtitle: "Registra tu cuenta para empezar a guardar tus rutinas.",
+      name: "Nombre",
+      creatingAccount: "Creando cuenta...",
+      registerBtn: "Registrarse",
+      haveAccount: "¿Ya tienes cuenta?",
+      signIn: "Inicia sesión",
+    },
+    notFound: {
+      text: "La página que buscas no existe.",
+      backToDashboard: "Volver al panel",
     },
     routines: {
       loading: "Cargando rutinas...",
@@ -64,28 +95,77 @@ const translations = {
       saveRoutine: "Guardar rutina",
 
       yourRoutines: "Tus rutinas",
-      noRoutines:
-        "Todavía no tienes ninguna rutina. Crea una con el formulario de arriba.",
+      noRoutines: "Todavía no tienes ninguna rutina. Crea una con el formulario de arriba.",
+
+      clickForDetails: "Haz clic para ver detalles",
+    },
+    routineDetail: {
+      loading: "Cargando rutina...",
+      loadFail: "No se pudo cargar la rutina",
+      notFound: "Rutina no encontrada",
+      exercisesTitle: "Ejercicios",
+      noExercises: "Esta rutina no tiene ejercicios.",
+      series: "series",
+      reps: "reps",
+      noSetsAssigned: "Este ejercicio no tiene series asignadas.",
+    },
+    errors: {
+      loginFailed: "Error al iniciar sesión",
+      registerFailed: "Error al registrarse",
+      noTokenFromServer: "El servidor no devolvió un token.",
+      requestFailed: "Request failed",
     },
   },
+
   en: {
     common: {
-      language: "Language",
-      spanish: "Spanish",
-      english: "English",
       loading: "Loading...",
       save: "Save",
       add: "Add",
       remove: "Remove",
-      login: "Log in",
-      register: "Sign up",
+      back: "Back",
+      yes: "Yes",
+      no: "No",
     },
     nav: {
-    dashboard: "Dashboard",
-    routines: "Routines",
-    login: "Log in",
-    register: "Sign up",
-    logout: "Log out",
+      dashboard: "Dashboard",
+      routines: "Routines",
+      login: "Log in",
+      register: "Sign up",
+      logout: "Log out",
+    },
+    languageToggle: {
+      title: "Toggle language",
+    },
+    dashboard: {
+      title: "Dashboard",
+      subtitle:
+        "Later we’ll show a summary of your workouts, stats, latest sessions, etc.",
+      sessionsThisWeek: "Sessions this week",
+      activeRoutines: "Active routines",
+      totalSets: "Total sets",
+    },
+    auth: {
+      loginTitle: "Log in",
+      loginSubtitle: "Access your training dashboard.",
+      email: "Email",
+      password: "Password",
+      loggingIn: "Logging in...",
+      loginBtn: "Log in",
+      noAccount: "Don’t have an account?",
+      signupHere: "Sign up here",
+
+      registerTitle: "Create account",
+      registerSubtitle: "Create your account to start saving your routines.",
+      name: "Name",
+      creatingAccount: "Creating account...",
+      registerBtn: "Sign up",
+      haveAccount: "Already have an account?",
+      signIn: "Log in",
+    },
+    notFound: {
+      text: "The page you’re looking for doesn’t exist.",
+      backToDashboard: "Back to dashboard",
     },
     routines: {
       loading: "Loading routines...",
@@ -129,8 +209,25 @@ const translations = {
       saveRoutine: "Save routine",
 
       yourRoutines: "Your routines",
-      noRoutines:
-        "You don't have any routines yet. Create one using the form above.",
+      noRoutines: "You don't have any routines yet. Create one using the form above.",
+
+      clickForDetails: "Click to view details",
+    },
+    routineDetail: {
+      loading: "Loading routine...",
+      loadFail: "Could not load the routine",
+      notFound: "Routine not found",
+      exercisesTitle: "Exercises",
+      noExercises: "This routine has no exercises.",
+      series: "sets",
+      reps: "reps",
+      noSetsAssigned: "This exercise has no assigned sets.",
+    },
+    errors: {
+      loginFailed: "Login failed",
+      registerFailed: "Sign up failed",
+      noTokenFromServer: "Server did not return a token.",
+      requestFailed: "Request failed",
     },
   },
 };

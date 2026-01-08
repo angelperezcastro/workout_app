@@ -1,20 +1,20 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { useI18n } from '../i18n/I18nProvider'
-import LanguageToggle from './LanguageToggle'
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useI18n } from "../i18n/I18nProvider";
+import LanguageToggle from "./LanguageToggle";
 
 function Navbar() {
-  const navigate = useNavigate()
-  const isLoggedIn = Boolean(localStorage.getItem('token'))
-  const { t } = useI18n()
+  const navigate = useNavigate();
+  const isLoggedIn = Boolean(localStorage.getItem("token"));
+  const { t } = useI18n();
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate('/login')
-  }
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   const linkClasses = ({ isActive }) =>
     `px-3 py-2 rounded-md text-sm font-medium transition
-     ${isActive ? 'bg-primary text-white' : 'text-slate-200 hover:bg-slate-800'}`
+     ${isActive ? "bg-primary text-white" : "text-slate-200 hover:bg-slate-800"}`;
 
   return (
     <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
@@ -30,44 +30,37 @@ function Navbar() {
           {isLoggedIn && (
             <>
               <NavLink to="/dashboard" className={linkClasses}>
-                {t('nav.dashboard')}
+                {t("nav.dashboard")}
               </NavLink>
               <NavLink to="/routines" className={linkClasses}>
-                {t('nav.routines')}
+                {t("nav.routines")}
               </NavLink>
             </>
           )}
 
           {!isLoggedIn ? (
             <>
-              <Link
-                to="/login"
-                className="text-sm font-medium text-slate-200 hover:text-white"
-              >
-                {t('nav.login')}
+              <Link to="/login" className="text-sm font-medium text-slate-200 hover:text-white">
+                {t("nav.login")}
               </Link>
               <Link
                 to="/register"
                 className="text-sm font-medium text-white bg-primary px-3 py-2 rounded-md hover:bg-primary-dark transition"
               >
-                {t('nav.register')}
+                {t("nav.register")}
               </Link>
             </>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="text-sm font-medium text-slate-200 hover:text-white"
-            >
-              {t('nav.logout')}
+            <button onClick={handleLogout} className="text-sm font-medium text-slate-200 hover:text-white">
+              {t("nav.logout")}
             </button>
           )}
 
-          {/* Botón ES/EN */}
           <LanguageToggle />
         </div>
       </nav>
     </header>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
