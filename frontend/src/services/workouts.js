@@ -9,3 +9,9 @@ export async function getWorkoutSessions() {
   const res = await api.get("/workouts");
   return res.data;
 }
+
+// ✅ NUEVO: resumen para Dashboard
+export async function getWorkoutSummary() {
+  const res = await api.get("/workouts/summary");
+  return res.data; // { totalSessions, totalDurationSeconds }
+}

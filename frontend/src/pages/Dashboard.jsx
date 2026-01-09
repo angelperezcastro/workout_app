@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRoutines } from "../services/routines";
+import { getWorkoutSummary } from "../services/workouts";
 import { useI18n } from "../i18n/I18nProvider";
 
 function Dashboard() {
@@ -10,6 +11,10 @@ function Dashboard() {
   const [routines, setRoutines] = useState([]);
   const [open, setOpen] = useState(false);
   const [loadingRoutines, setLoadingRoutines] = useState(false);
+
+  // ✅ NUEVO
+  const [summary, setSummary] = useState({ totalSessions: 0, totalDurationSeconds: 0 });
+  const [loadingSummary, setLoadingSummary] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -24,6 +29,31 @@ function Dashboard() {
       }
     })();
   }, []);
+
+  // ✅ NUEVO: cargar resumen de sesiones
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoadingSummary(true);
+        const data = await getWorkoutSummary();
+        setSummary({
+          totalSessions: Number(data?.totalSessions || 0),
+          totalDurationSeconds: Number(data?.totalDurationSeconds || 0),
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoadingSummary(false);
+      }
+    })();
+  }, []);
+
+  const totalTimeLabel = useMemo(() => {
+    const total = Number(summary.totalDurationSeconds || 0);
+    const hours = Math.floor(total / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    return `${hours}${t("dashboard.hoursShort")} ${minutes}${t("dashboard.minutesShort")}`;
+  }, [summary.totalDurationSeconds, t]);
 
   const startRoutine = (routineId) => {
     setOpen(false);
@@ -46,6 +76,19 @@ function Dashboard() {
         </button>
       </div>
 
+      {/* ✅ NUEVO: stats */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
+          <div className="text-sm text-slate-300">{t("dashboard.completedRoutines")}</div>
+          <div className="mt-2 text-3xl font-bold">{loadingSummary ? "…" : summary.totalSessions}</div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
+          <div className="text-sm text-slate-300">{t("dashboard.totalTime")}</div>
+          <div className="mt-2 text-3xl font-bold">{loadingSummary ? "…" : totalTimeLabel}</div>
+        </div>
+      </div>
+
       {/* Modal selector */}
       {open && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
@@ -55,10 +98,7 @@ function Dashboard() {
                 <h2 className="text-xl font-semibold">{t("dashboard.modalTitle")}</h2>
                 <p className="text-sm text-slate-300">{t("dashboard.modalSubtitle")}</p>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-slate-300 hover:text-white"
-              >
+              <button onClick={() => setOpen(false)} className="text-slate-300 hover:text-white">
                 ✕
               </button>
             </div>
@@ -77,9 +117,7 @@ function Dashboard() {
                   >
                     <div className="font-semibold">{r.name}</div>
                     {r.description && (
-                      <div className="text-sm text-slate-300 line-clamp-2">
-                        {r.description}
-                      </div>
+                      <div className="text-sm text-slate-300 line-clamp-2">{r.description}</div>
                     )}
                   </button>
                 ))}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRoutine } from "../services/routines";
 import { createWorkoutSession } from "../services/workouts";
@@ -20,7 +20,8 @@ export default function WorkoutRun() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [startedAt] = useState(() => Date.now());
+  // ✅ más robusto que useState para timestamps
+  const startedAtRef = useRef(Date.now());
   const [elapsed, setElapsed] = useState(0);
 
   // checkbox state: { [exerciseIndex]: boolean[] }
@@ -28,10 +29,10 @@ export default function WorkoutRun() {
 
   useEffect(() => {
     const tick = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - startedAt) / 1000));
+      setElapsed(Math.floor((Date.now() - startedAtRef.current) / 1000));
     }, 1000);
     return () => clearInterval(tick);
-  }, [startedAt]);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -81,6 +82,7 @@ export default function WorkoutRun() {
     if (!routine) return;
 
     const endedAt = Date.now();
+    const startedAt = startedAtRef.current;
     const durationSeconds = Math.floor((endedAt - startedAt) / 1000);
 
     const performedExercises = (routine.exercises || []).map((ex, idx) => {
@@ -127,12 +129,16 @@ export default function WorkoutRun() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">{routine.name}</h1>
-          {routine.description && <p className="text-slate-300 mt-1">{routine.description}</p>}
+          {routine.description && (
+            <p className="text-slate-300 mt-1">{routine.description}</p>
+          )}
         </div>
 
         <div className="text-right">
           <div className="text-sm text-slate-400">Tiempo</div>
-          <div className="text-2xl font-semibold tabular-nums">{formatTime(elapsed)}</div>
+          <div className="text-2xl font-semibold tabular-nums">
+            {formatTime(elapsed)}
+          </div>
           <div className="text-xs text-slate-400 mt-1">
             Series: {totalSetsDone}/{totalSetsPlanned}
           </div>
@@ -153,7 +159,9 @@ export default function WorkoutRun() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-lg font-semibold">{exObj.name || "Ejercicio"}</div>
+                  <div className="text-lg font-semibold">
+                    {exObj.name || "Ejercicio"}
+                  </div>
                   <div className="text-sm text-slate-300">
                     {sets} series · {ex.reps} reps · {ex.weight ?? "-"} kg
                   </div>
