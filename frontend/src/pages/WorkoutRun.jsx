@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRoutine } from "../services/routines";
 import { createWorkoutSession } from "../services/workouts";
+import { useI18n } from "../i18n/I18nProvider";
 
 function formatTime(totalSeconds) {
   const h = Math.floor(totalSeconds / 3600);
@@ -13,6 +14,7 @@ function formatTime(totalSeconds) {
 }
 
 export default function WorkoutRun() {
+  const { t } = useI18n();
   const { id } = useParams(); // routineId
   const navigate = useNavigate();
 
@@ -20,7 +22,6 @@ export default function WorkoutRun() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ más robusto que useState para timestamps
   const startedAtRef = useRef(Date.now());
   const [elapsed, setElapsed] = useState(0);
 
@@ -49,12 +50,12 @@ export default function WorkoutRun() {
         setDoneMap(initial);
       } catch (e) {
         console.error(e);
-        setError("No se pudo cargar la rutina");
+        setError(t("workoutRun.loadFail"));
       } finally {
         setLoading(false);
       }
     })();
-  }, [id]);
+  }, [id, t]);
 
   const totalSetsDone = useMemo(() => {
     return Object.values(doneMap).reduce(
@@ -115,13 +116,13 @@ export default function WorkoutRun() {
       navigate("/dashboard");
     } catch (e) {
       console.error(e);
-      alert("No se pudo guardar la sesión");
+      alert(t("workoutRun.saveFail"));
     }
   };
 
-  if (loading) return <p>Cargando rutina...</p>;
+  if (loading) return <p>{t("workoutRun.loading")}</p>;
   if (error) return <p className="text-red-400">{error}</p>;
-  if (!routine) return <p>Rutina no encontrada</p>;
+  if (!routine) return <p>{t("workoutRun.notFound")}</p>;
 
   return (
     <div className="space-y-6">
@@ -135,12 +136,12 @@ export default function WorkoutRun() {
         </div>
 
         <div className="text-right">
-          <div className="text-sm text-slate-400">Tiempo</div>
+          <div className="text-sm text-slate-400">{t("workoutRun.time")}</div>
           <div className="text-2xl font-semibold tabular-nums">
             {formatTime(elapsed)}
           </div>
           <div className="text-xs text-slate-400 mt-1">
-            Series: {totalSetsDone}/{totalSetsPlanned}
+            {t("workoutRun.setsLabel")}: {totalSetsDone}/{totalSetsPlanned}
           </div>
         </div>
       </div>
@@ -160,10 +161,11 @@ export default function WorkoutRun() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-lg font-semibold">
-                    {exObj.name || "Ejercicio"}
+                    {exObj.name || t("routines.exerciseFallback")}
                   </div>
                   <div className="text-sm text-slate-300">
-                    {sets} series · {ex.reps} reps · {ex.weight ?? "-"} kg
+                    {sets} {t("routineDetail.series")} · {ex.reps}{" "}
+                    {t("routineDetail.reps")} · {ex.weight ?? "-"} kg
                   </div>
                 </div>
 
@@ -187,7 +189,9 @@ export default function WorkoutRun() {
                       onChange={() => toggleSet(exerciseIdx, setIdx)}
                       className="h-4 w-4"
                     />
-                    <span>Serie {setIdx + 1}</span>
+                    <span>
+                      {t("workoutRun.set")} {setIdx + 1}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -202,7 +206,7 @@ export default function WorkoutRun() {
           onClick={finishWorkout}
           className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-semibold"
         >
-          Finalizar rutina
+          {t("workoutRun.finishBtn")}
         </button>
       </div>
     </div>

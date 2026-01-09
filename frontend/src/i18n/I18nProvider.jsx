@@ -42,6 +42,20 @@ const translations = {
 
     },
 
+    workoutRun: {
+      loading: "Cargando rutina...",
+      loadFail: "No se pudo cargar la rutina",
+      notFound: "Rutina no encontrada",
+      saveFail: "No se pudo guardar la sesión",
+
+      time: "Tiempo",
+      setsLabel: "Series",
+
+      set: "Serie",
+      finishBtn: "Finalizar rutina",
+    },
+
+
     auth: {
       loginTitle: "Iniciar sesión",
       loginSubtitle: "Accede a tu panel de entrenamientos.",
@@ -166,6 +180,20 @@ const translations = {
       minutesShort: "m",
 
     },
+
+    workoutRun: {
+      loading: "Loading routine...",
+      loadFail: "Could not load the routine",
+      notFound: "Routine not found",
+      saveFail: "Could not save the session",
+
+      time: "Time",
+      setsLabel: "Sets",
+
+      set: "Set",
+      finishBtn: "Finish workout",
+    },
+
 
     auth: {
       loginTitle: "Log in",
