@@ -34,6 +34,12 @@ const translations = {
       modalSubtitle: "Selecciona la rutina que vas a entrenar.",
       loadingRoutines: "Cargando rutinas...",
       noRoutines: "Aún no tienes rutinas creadas. Ve a “Rutinas” y crea una primero.",
+
+      completedRoutines: "Rutinas completadas",
+      totalTime: "Tiempo total",
+      hoursShort: "h",
+      minutesShort: "m",
+
     },
 
     auth: {
@@ -153,6 +159,12 @@ const translations = {
       modalSubtitle: "Select the routine you’re going to train.",
       loadingRoutines: "Loading routines...",
       noRoutines: "You don’t have any routines yet. Go to “Routines” and create one first.",
+
+      completedRoutines: "Completed routines",
+      totalTime: "Total time",
+      hoursShort: "h",
+      minutesShort: "m",
+
     },
 
     auth: {
