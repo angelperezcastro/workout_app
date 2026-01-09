@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRoutines } from "../services/routines";
+import { useI18n } from "../i18n/I18nProvider";
 
 function Dashboard() {
+  const { t } = useI18n();
   const navigate = useNavigate();
+
   const [routines, setRoutines] = useState([]);
   const [open, setOpen] = useState(false);
   const [loadingRoutines, setLoadingRoutines] = useState(false);
@@ -31,17 +34,15 @@ function Dashboard() {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">Panel</h1>
-          <p className="text-slate-300">
-            Inicia una rutina y registra tu sesión con tiempo y series completadas.
-          </p>
+          <h1 className="text-3xl font-semibold">{t("dashboard.title")}</h1>
+          <p className="text-slate-300">{t("dashboard.subtitle")}</p>
         </div>
 
         <button
           onClick={() => setOpen(true)}
           className="px-6 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-lg"
         >
-          Iniciar rutina
+          {t("dashboard.startRoutineBtn")}
         </button>
       </div>
 
@@ -51,8 +52,8 @@ function Dashboard() {
           <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-950 p-5">
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
-                <h2 className="text-xl font-semibold">Elige una rutina</h2>
-                <p className="text-sm text-slate-300">Selecciona la rutina que vas a entrenar.</p>
+                <h2 className="text-xl font-semibold">{t("dashboard.modalTitle")}</h2>
+                <p className="text-sm text-slate-300">{t("dashboard.modalSubtitle")}</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
@@ -63,11 +64,9 @@ function Dashboard() {
             </div>
 
             {loadingRoutines ? (
-              <p className="text-slate-300">Cargando rutinas...</p>
+              <p className="text-slate-300">{t("dashboard.loadingRoutines")}</p>
             ) : routines.length === 0 ? (
-              <p className="text-slate-300">
-                Aún no tienes rutinas creadas. Ve a “Rutinas” y crea una primero.
-              </p>
+              <p className="text-slate-300">{t("dashboard.noRoutines")}</p>
             ) : (
               <div className="space-y-2">
                 {routines.map((r) => (
@@ -78,7 +77,9 @@ function Dashboard() {
                   >
                     <div className="font-semibold">{r.name}</div>
                     {r.description && (
-                      <div className="text-sm text-slate-300 line-clamp-2">{r.description}</div>
+                      <div className="text-sm text-slate-300 line-clamp-2">
+                        {r.description}
+                      </div>
                     )}
                   </button>
                 ))}
