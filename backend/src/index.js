@@ -20,6 +20,8 @@ app.use('/api/auth', authRoutes)
 app.use('/api/routines', routineRoutes)
 app.use('/api/workouts', workoutRoutes)
 app.use('/api/exercises', exerciseRoutes)   
+app.use('/api/workouts', require('./routes/workoutRoutes'));
+
 
 const PORT = process.env.PORT || 5000
 

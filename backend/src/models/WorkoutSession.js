@@ -1,22 +1,31 @@
 const mongoose = require('mongoose');
 
-const performedSetSchema = new mongoose.Schema({
-  reps: { type: Number },
-  weight: { type: Number }
-});
+const performedExerciseSchema = new mongoose.Schema(
+  {
+    exerciseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exercise', required: true },
+    sets: Number,
+    reps: Number,
+    weight: Number,
+    completedSets: Number,
+    perSetDone: [Boolean],
+  },
+  { _id: false }
+);
 
-const performedExerciseSchema = new mongoose.Schema({
-  exerciseName: { type: String, required: true },
-  sets: [performedSetSchema]
-});
+const workoutSessionSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    routineId: { type: mongoose.Schema.Types.ObjectId, ref: 'Routine', required: true },
 
-const workoutSessionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  routineId: { type: mongoose.Schema.Types.ObjectId, ref: 'Routine', required: true },
-  date: { type: Date, default: Date.now },
-  performedExercises: [performedExerciseSchema]
-});
+    date: { type: Date, default: Date.now },
 
-const WorkoutSession = mongoose.model('WorkoutSession', workoutSessionSchema);
+    startedAt: Date,
+    endedAt: Date,
+    durationSeconds: Number,
 
-module.exports = WorkoutSession;
+    performedExercises: [performedExerciseSchema],
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('WorkoutSession', workoutSessionSchema);
