@@ -10,6 +10,23 @@ function RoutineDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // 🔧 Normaliza rutas de imágenes de ejercicios
+  const getExerciseImgSrc = (imageUrl) => {
+    const raw = imageUrl || "";
+
+    // Si es URL completa, no tocar
+    if (/^https?:\/\//i.test(raw)) return raw;
+
+    // Forzar carpeta correcta (I mayúscula)
+    const normalized = raw.replace(
+      /^\/exercisesimages\//,
+      "/exercisesImages/"
+    );
+
+    // Encode para espacios y caracteres raros
+    return encodeURI(normalized);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,9 +52,13 @@ function RoutineDetail() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{routine.name}</h1>
 
-      {routine.description && <p className="text-slate-300">{routine.description}</p>}
+      {routine.description && (
+        <p className="text-slate-300">{routine.description}</p>
+      )}
 
-      <h2 className="text-xl font-semibold">{t("routineDetail.exercisesTitle")}</h2>
+      <h2 className="text-xl font-semibold">
+        {t("routineDetail.exercisesTitle")}
+      </h2>
 
       {routine.exercises?.length === 0 ? (
         <p className="text-slate-400">{t("routineDetail.noExercises")}</p>
@@ -55,16 +76,32 @@ function RoutineDetail() {
                 <div className="flex gap-4 items-start">
                   {hasImage && (
                     <img
-                      src={exercise.imageUrl}
-                      alt={exercise.name || t("routines.exerciseFallback")}
+                      src={getExerciseImgSrc(exercise.imageUrl)}
+                      alt={
+                        exercise.name ||
+                        t("routines.exerciseFallback")
+                      }
                       className="w-28 h-28 rounded-md object-cover flex-shrink-0 border border-slate-800"
+                      onError={(e) => {
+                        const curr =
+                          e.currentTarget.getAttribute("src") || "";
+
+                        // Fallback extra por si viene mal guardado
+                        if (curr.includes("/exercisesimages/")) {
+                          e.currentTarget.src = curr.replace(
+                            "/exercisesimages/",
+                            "/exercisesImages/"
+                          );
+                        }
+                      }}
                     />
                   )}
 
                   <div className="flex-1 space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <span className="font-medium text-lg">
-                        {exercise.name || t("routines.exerciseFallback")}
+                        {exercise.name ||
+                          t("routines.exerciseFallback")}
                       </span>
 
                       {exercise.muscleGroup && (
@@ -80,16 +117,25 @@ function RoutineDetail() {
                       </p>
                     )}
 
-                    {(ex.sets || ex.reps || ex.weight) ? (
+                    {ex.sets || ex.reps || ex.weight ? (
                       <p className="text-sm text-slate-300">
-                        <span className="font-semibold">{ex.sets ?? "-"}</span>{" "}
+                        <span className="font-semibold">
+                          {ex.sets ?? "-"}
+                        </span>{" "}
                         {t("routineDetail.series")} ·{" "}
-                        <span className="font-semibold">{ex.reps ?? "-"}</span>{" "}
+                        <span className="font-semibold">
+                          {ex.reps ?? "-"}
+                        </span>{" "}
                         {t("routineDetail.reps")} ·{" "}
-                        <span className="font-semibold">{ex.weight ?? "-"}</span> kg
+                        <span className="font-semibold">
+                          {ex.weight ?? "-"}
+                        </span>{" "}
+                        kg
                       </p>
                     ) : (
-                      <p className="text-slate-300 text-sm">{t("routineDetail.noSetsAssigned")}</p>
+                      <p className="text-slate-300 text-sm">
+                        {t("routineDetail.noSetsAssigned")}
+                      </p>
                     )}
                   </div>
                 </div>
