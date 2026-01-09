@@ -27,7 +27,7 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
+    <div className="register-bg min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-lg">
         <h1 className="text-2xl font-semibold mb-2">{t("auth.registerTitle")}</h1>
         <p className="text-sm text-slate-300 mb-6">{t("auth.registerSubtitle")}</p>
