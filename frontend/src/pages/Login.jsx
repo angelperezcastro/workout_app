@@ -18,75 +18,99 @@ function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
-      const { token } = await login({ email, password });
+      // Soporta ambas firmas:
+      // - login(email, password)
+      // - login({ email, password })
+      let res;
+      try {
+        res = await login(email, password);
+      } catch {
+        res = await login({ email, password });
+      }
+
+      // Puede venir como:
+      // { token, user } o { data: { token, user } }
+      const token = res?.token ?? res?.data?.token;
+      const user = res?.user ?? res?.data?.user;
+
+      if (!token || typeof token !== "string") {
+        throw new Error("No token received from server");
+      }
+
       localStorage.setItem("token", token);
+      if (user) localStorage.setItem("user", JSON.stringify(user));
+
       navigate(from, { replace: true });
     } catch (err) {
-      // Si err.message viene del backend, se mostrará tal cual.
-      setError(t(err.message) || err.message || t("errors.loginFailed"));
+      // Manejo de error típico con axios
+      const backendMsg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message;
 
+      setError(backendMsg ? (t(backendMsg) || backendMsg) : t("errors.loginFailed"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-  <div className="login-bg min-h-screen flex items-center justify-center">
-    <div className="w-full max-w-md bg-slate-900/70 backdrop-blur rounded-2xl border border-slate-800 p-6 shadow-lg">
-      <h1 className="text-2xl font-semibold mb-2">{t("auth.loginTitle")}</h1>
-      <p className="text-sm text-slate-300 mb-6">{t("auth.loginSubtitle")}</p>
+    <div className="login-bg min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md bg-slate-900/70 backdrop-blur rounded-2xl border border-slate-800 p-6 shadow-lg">
+        <h1 className="text-2xl font-semibold mb-2">{t("auth.loginTitle")}</h1>
+        <p className="text-sm text-slate-300 mb-6">{t("auth.loginSubtitle")}</p>
 
-      {error && (
-        <div className="mb-4 text-sm text-red-400 bg-red-950/40 border border-red-900 px-3 py-2 rounded-lg">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="mb-4 text-sm text-red-400 bg-red-950/40 border border-red-900 px-3 py-2 rounded-lg">
+            {error}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm mb-1">{t("auth.email")}</label>
-          <input
-            type="email"
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm mb-1">{t("auth.email")}</label>
+            <input
+              type="email"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm mb-1">{t("auth.password")}</label>
-          <input
-            type="password"
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
-        </div>
+          <div>
+            <label className="block text-sm mb-1">{t("auth.password")}</label>
+            <input
+              type="password"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full mt-2 rounded-lg bg-primary hover:bg-primary-dark text-white py-2 text-sm font-medium disabled:opacity-60"
-        >
-          {loading ? t("auth.loggingIn") : t("auth.loginBtn")}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-2 rounded-lg bg-primary hover:bg-primary-dark text-white py-2 text-sm font-medium disabled:opacity-60"
+          >
+            {loading ? t("auth.loggingIn") : t("auth.loginBtn")}
+          </button>
+        </form>
 
-      <p className="mt-4 text-xs text-slate-400">
-        {t("auth.noAccount")}{" "}
-        <Link to="/register" className="text-primary-light hover:underline">
-          {t("auth.signupHere")}
-        </Link>
-      </p>
+        <p className="mt-4 text-xs text-slate-400">
+          {t("auth.noAccount")}{" "}
+          <Link to="/register" className="text-primary-light hover:underline">
+            {t("auth.signupHere")}
+          </Link>
+        </p>
+      </div>
     </div>
-  </div>
-);
-
+  );
 }
 
 export default Login;
