@@ -23,14 +23,19 @@ const translations = {
     languageToggle: {
       title: "Cambiar idioma",
     },
+
+    // ✅ Actualizado para el Dashboard REAL
     dashboard: {
       title: "Panel",
-      subtitle:
-        "Aquí más adelante mostraremos un resumen de tus entrenamientos, estadísticas, últimas sesiones, etc.",
-      sessionsThisWeek: "Sesiones esta semana",
-      activeRoutines: "Rutinas activas",
-      totalSets: "Series totales",
+      subtitle: "Inicia una rutina y registra tu sesión con tiempo y series completadas.",
+      startRoutineBtn: "Iniciar rutina",
+
+      modalTitle: "Elige una rutina",
+      modalSubtitle: "Selecciona la rutina que vas a entrenar.",
+      loadingRoutines: "Cargando rutinas...",
+      noRoutines: "Aún no tienes rutinas creadas. Ve a “Rutinas” y crea una primero.",
     },
+
     auth: {
       loginTitle: "Iniciar sesión",
       loginSubtitle: "Accede a tu panel de entrenamientos.",
@@ -137,14 +142,19 @@ const translations = {
     languageToggle: {
       title: "Toggle language",
     },
+
+    // ✅ Updated for the REAL Dashboard
     dashboard: {
       title: "Dashboard",
-      subtitle:
-        "Later we’ll show a summary of your workouts, stats, latest sessions, etc.",
-      sessionsThisWeek: "Sessions this week",
-      activeRoutines: "Active routines",
-      totalSets: "Total sets",
+      subtitle: "Start a routine and log your session with time and completed sets.",
+      startRoutineBtn: "Start routine",
+
+      modalTitle: "Choose a routine",
+      modalSubtitle: "Select the routine you’re going to train.",
+      loadingRoutines: "Loading routines...",
+      noRoutines: "You don’t have any routines yet. Go to “Routines” and create one first.",
     },
+
     auth: {
       loginTitle: "Log in",
       loginSubtitle: "Access your training dashboard.",
