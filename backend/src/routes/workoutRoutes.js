@@ -8,14 +8,17 @@ router.use(auth);
 
 // create sesion
 router.post('/', async (req, res) => {
-  const { routineId, date, performedExercises } = req.body;
+  const { routineId, date, performedExercises, startedAt, endedAt, durationSeconds } = req.body;
 
   try {
     const session = new WorkoutSession({
       userId: req.user.userId,
       routineId,
-      date,
-      performedExercises
+      date: date ? new Date(date) : new Date(),
+      startedAt: startedAt ? new Date(startedAt) : undefined,
+      endedAt: endedAt ? new Date(endedAt) : undefined,
+      durationSeconds: typeof durationSeconds === 'number' ? durationSeconds : undefined,
+      performedExercises,
     });
 
     await session.save();
