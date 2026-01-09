@@ -7,6 +7,8 @@ import Routines from './pages/Routines'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoutineDetail from './pages/RoutineDetail'
+import WorkoutRun from "./pages/WorkoutRun";
+
 
 import './App.css'
 
@@ -72,6 +74,15 @@ function App() {
           }
         />
 
+        <Route
+          path="/workout/:id"
+          element={
+            <ProtectedRoute>
+              <WorkoutRun />
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
